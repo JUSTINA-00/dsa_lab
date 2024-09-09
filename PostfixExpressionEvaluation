@@ -1,0 +1,64 @@
+public class PostfixExpressionEvaluation {
+	private int[] stack;
+    private int top;
+
+    // Constructor to initialize the stack
+    public PostfixExpressionEvaluation(int size) {
+        stack = new int[size];
+        top = -1; // Stack is initially empty
+    }
+
+    // Method to push an element onto the stack
+    private void push(int value) {
+        stack[++top] = value; // Increment top and add value
+    }
+
+    // Method to pop an element from the stack
+    private int pop() {
+        return stack[top--]; // Return the top value and decrement top
+    }
+
+    // Method to evaluate the postfix expression
+    public int evaluatePostfix(String expression) {
+        for (int i = 0; i < expression.length(); i++) {
+            char ch = expression.charAt(i);
+
+            // If the character is a number, push it onto the stack
+            if (Character.isDigit(ch)) {
+                push(ch - '0'); // Convert char to int
+            } else {
+                // The character is an operator
+                int operand2 = pop(); // Pop the top operand
+                int operand1 = pop(); // Pop the next operand
+
+                // Perform the operation and push the result back onto the stack
+                switch (ch) {
+                    case '+':
+                        push(operand1 + operand2);
+                        break;
+                    case '-':
+                        push(operand1 - operand2);
+                        break;
+                    case '*':
+                        push(operand1 * operand2);
+                        break;
+                    case '/':
+                        push(operand1 / operand2);
+                        break;
+                }
+            }
+        }
+
+        // The final result will be the only element left in the stack
+        return pop();
+    }
+
+    public static void main(String[] args) {
+    	Scanner sc = new Scanner (System.in);
+    	System.out.println("enter postfix expression: ");
+        String postfixExpression = sc.nextLine(); 
+        PostfixExpressionEvaluation evaluator = new PostfixExpressionEvaluation(postfixExpression.length());
+        int result = evaluator.evaluatePostfix(postfixExpression);
+        System.out.println("The result of the postfix expression is: " + result);
+    }
+}
